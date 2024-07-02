@@ -182,9 +182,9 @@
 <body>
 
 <div class="header">
-    <a href="tel:34634815699"><i class="fa-solid fa-phone"></i></a>
+    <a href="tel:+34634815699"><i class="fas fa-phone"></i></a>
     <img src="https://piensoselandaluz.com/img/piensos-andaluz-logo-1707295970.jpg" alt="Logo" class="logo">
-    <a href="https://api.whatsapp.com/send?phone=+34634815699&text=Hola%20buenas%20quería%20hacer%20un%20pedido"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="https://api.whatsapp.com/send?phone=+34634815699&text=Hola%20buenas%20quería%20hacer%20un%20pedido"><i class="fab fa-whatsapp"></i></a>
 </div>
 
 <div id="popup" class="popup">
@@ -194,10 +194,10 @@
         <span>Para gastar en tienda</span>
         <form id="sorteoForm">
             <input type="text" placeholder="Nombre" required><br>
-            <input type="email" placeholder="Email" required><br> 
+            <input type="email" placeholder="Email" required><br>
             <input type="tel" id="phone" placeholder="Teléfono" required><br>
             <span id="phoneError" style="display:none;color:red;">Teléfono inválido, debe tener al menos 10 dígitos.</span><br>
-            <label for="">¿Qué tipo de mascota tienes?</label>
+            <label for="mascota">¿Qué tipo de mascota tienes?</label>
             <select name="mascota" id="mascota">
                 <option value="gatos">Gatos</option>
                 <option value="perros">Perros</option>
@@ -211,33 +211,33 @@
     </div>
 </div>
 
-
-
 <div class="video-container" id="video1" data-nombre="Sorteo" data-descripcion="Participa Hoy en Nuestro Sorteo 🐶🐱🐦" data-precio="⭐⭐⭐⭐">
     <video autoplay loop muted playsinline>
         <source src="elandaluz.mp4" type="video/mp4">
         Tu navegador no soporta videos.
     </video>
 </div>
-<div class="video-container" id="video1" data-nombre="Gatos" data-descripcion="" data-precio="⭐⭐⭐⭐">
+
+<div class="video-container" id="video2" data-nombre="Gatos" data-descripcion="" data-precio="⭐⭐⭐⭐">
     <video autoplay loop muted playsinline>
         <source src="elandaluz2.mp4" type="video/mp4">
         Tu navegador no soporta videos.
     </video>
 </div>
-<div class="video-container" id="video1" data-nombre="Perros" data-descripcion="" data-precio="⭐⭐⭐⭐">
+
+<div class="video-container" id="video3" data-nombre="Perros" data-descripcion="" data-precio="⭐⭐⭐⭐">
     <video autoplay loop muted playsinline>
         <source src="elandaluz3.mp4" type="video/mp4">
         Tu navegador no soporta videos.
     </video>
 </div>
-<div class="video-container" id="video1" data-nombre="Pájaros" data-descripcion="" data-precio="⭐⭐⭐⭐">
+
+<div class="video-container" id="video4" data-nombre="Pájaros" data-descripcion="" data-precio="⭐⭐⭐⭐">
     <video autoplay loop muted playsinline>
         <source src="elandaluz4.mp4" type="video/mp4">
         Tu navegador no soporta videos.
     </video>
 </div>
-
 
 <div class="producto">
     <div>
@@ -249,111 +249,105 @@
     </div>
 </div>
 
-
 <script>
-
     window.onload = function() {
         document.getElementById("popup").style.display = "block";
-    }
+    };
 
     function cerrarPopup() {
         document.getElementById("popup").style.display = "none";
     }
 
+    document.addEventListener("DOMContentLoaded", () => {
+        let observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    let nombre = entry.target.getAttribute('data-nombre');
+                    let descripcion = entry.target.getAttribute('data-descripcion');
+                    let precio = entry.target.getAttribute('data-precio');
 
-document.addEventListener("DOMContentLoaded", () => {
-    let observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting) {
-                let nombre = entry.target.getAttribute('data-nombre');
-                let descripcion = entry.target.getAttribute('data-descripcion');
-                let precio = entry.target.getAttribute('data-precio');
+                    document.getElementById('nombreProducto').textContent = nombre;
+                    document.getElementById('descripcionProducto').textContent = descripcion;
+                    document.getElementById('precioProducto').textContent = precio;
+                }
+            });
+        }, { threshold: 0.5 });
 
-                document.getElementById('nombreProducto').textContent = nombre;
-                document.getElementById('descripcionProducto').textContent = descripcion;
-                document.getElementById('precioProducto').textContent = precio;
-            }
+        document.querySelectorAll('.video-container').forEach(container => {
+            observer.observe(container);
         });
-    }, { threshold: 0.5 });
-
-    document.querySelectorAll('.video-container').forEach(container => {
-        observer.observe(container);
     });
-});
 
+    const telefonoInput = document.getElementById("phone");
+    const phoneError = document.getElementById("phoneError");
+    const form = document.getElementById("sorteoForm");
 
+    telefonoInput.addEventListener("input", function () {
+        let telefono = telefonoInput.value.replace(/\s+/g, '');
+        telefono = telefono.replace(/[^0-9+]/g, '');
 
-
-const telefonoInput = document.getElementById("phone");
-const phoneError = document.getElementById("phoneError");
-const form = document.getElementById("sorteoForm");
-
-telefonoInput.addEventListener("input", function () {
-    let telefono = telefonoInput.value.replace(/\s+/g, '');
-    telefono = telefono.replace(/[^0-9+]/g, '');
-
-    if (telefono.startsWith("+34")) {
-        if (telefono.length > 15) {
-            telefono = telefono.slice(0, 15);
+        if (telefono.startsWith("+34")) {
+            if (telefono.length > 15) {
+                telefono = telefono.slice(0, 15);
+            }
+        } else {
+            telefono = "+34" + telefono;
         }
-    } else {
-        telefono = "+34" + telefono;
-    }
 
-    telefonoInput.value = telefono;
+        telefonoInput.value = telefono;
 
-    // Validar longitud del teléfono en tiempo real
-    if (telefono.replace(/\D/g, '').length >= 10) {
-        phoneError.style.display = 'none';
-        form.querySelector('button[type="submit"]').disabled = false;
-    } else {
-        phoneError.style.display = 'block';
-        form.querySelector('button[type="submit"]').disabled = true;
-    }
-});
-
-form.addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const inputName = encodeURIComponent(form.querySelector('input[type="text"]').value);
-    const inputEmailClient = encodeURIComponent(form.querySelector('input[type="email"]').value);
-    const inputPhone = encodeURIComponent(telefonoInput.value.replace(/\s+/g, ''));
-    const clientEmail = encodeURIComponent("piensoelandaluz@gmx.es");
-    const mascota = encodeURIComponent(form.getElementById("mascota").value);
-
-    // Enviar datos solo si el teléfono tiene al menos 10 dígitos
-    if (inputPhone.replace(/\D/g, '').length < 10) {
-        phoneError.style.display = 'block';
-        return;
-    } else {
-        phoneError.style.display = 'none';
-    }
-
-    const url = `https://hooks.zapier.com/hooks/catch/19308114/233eygm/?clientEmail=${clientEmail}&leadName=${inputName}&leadPhone=${inputPhone}inputEmailClient=${inputEmailClient}&mascota=${mascota}`;
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({})
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // Validar longitud del teléfono en tiempo real
+        if (telefono.replace(/\D/g, '').length >= 10) {
+            phoneError.style.display = 'none';
+            form.querySelector('button[type="submit"]').disabled = false;
+        } else {
+            phoneError.style.display = 'block';
+            form.querySelector('button[type="submit"]').disabled = true;
         }
-        return response.json();
-    })
-    .then(result => {
-        console.log(result);
-        // Aquí puedes añadir código para mostrar algún mensaje de confirmación al usuario
-    })
-    .catch(error => {
-        document.getElementById('popup').style.display = 'none';
     });
-});
- 
 
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const inputName = encodeURIComponent(form.querySelector('input[type="text"]').value);
+        const inputEmailClient = encodeURIComponent(form.querySelector('input[type="email"]').value);
+        const inputPhone = encodeURIComponent(telefonoInput.value.replace(/\s+/g, ''));
+        const clientEmail = encodeURIComponent("piensoelandaluz@gmx.es");
+        const mascota = encodeURIComponent(form.querySelector("#mascota").value);
+
+        // Enviar datos solo si el teléfono tiene al menos 10 dígitos
+        if (inputPhone.replace(/\D/g, '').length < 10) {
+            phoneError.style.display = 'block';
+            return;
+        } else {
+            phoneError.style.display = 'none';
+        }
+
+        const url = `https://hooks.zapier.com/hooks/catch/19308114/233eygm/?clientEmail=${clientEmail}&leadName=${inputName}&leadPhone=${inputPhone}&inputEmailClient=${inputEmailClient}&mascota=${mascota}`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(result => {
+            console.log(result);
+            // Aquí puedes añadir código para mostrar algún mensaje de confirmación al usuario
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+            document.getElementById('popup').style.display = 'none';
+        });
+    });
 </script>
+
 </body>
 </html>
